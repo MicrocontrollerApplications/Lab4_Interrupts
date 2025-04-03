@@ -11,51 +11,83 @@
 void __init(void);
 void __interrupt(high_priority) __isr(void);
 
+static unsigned char time_step_in_ms;
+/*
+ * Exercise 3.a
+ * Define a global variable as a flag for clock updates
+ */
+
 void main(void) {
     __init();
 
     while (1) {
         Nop();
+        /*
+         * Exercise 3.b
+         * Implement clock update
+         */
     }
 
     return;
 }
 
 void __init(void) {
-    OSCCONbits.IRCF = 0b010; // Fosc = 500kHz
-        
-    ANSELB = 0;
-    TRISB = 0b00000100; // TL as input; remaining pins as output
-    LATB = 0;
+    OSCCONbits.IRCF = 0b010; // Fosc = ??
+    GLCD_Init();
+    GLCD_Text2Out(0, 2, "00:00.0");
+
+    /*
+     * Exercise 1.a
+     * Pin configuration. 
+     *  - Keep in mind the two possible modes.
+     *  - Check the instructions for potentially relevant input pins.
+     */
     
     
-    // Configure Timer 0 (incl. interrupt)
+    /* 
+     * Timer0 shall overflow after approx. 130ms (no CCP required)
+     */
+    T0CONbits.T08BIT = 1;
+    T0CONbits.T0CS = 0;
+    T0CONbits.PSA = 0;
+    /*
+     * Exercise 1.b
+     * Add missing configurations for Timer0 and enable the related interrupt
+     */
     
     
-    // Configure Timer 1 and CCP1 (incl. interrupt)
+    /*
+     * Exercise 1.c
+     * Add missing configurations for Timer1
+     */
+    T1CONbits.T1CKPS = 2; // PS = ?
+    T1CONbits.T1SYNC = 1;
+    TMR1 = 0;
+    T1CONbits.TMR1ON = 1;
+    time_step_in_ms = 100;
+    
+    /*
+     * Exercise 1.d
+     * Configure CCP Module and the related interrupt
+     */
     
     
-    // Configure interrupt for TL
     
+    
+    /*
+     * Exercise 2.a
+     * Configure an external interrupt for RB2
+     */
+    
+    
+    /*
+     * Exercise 2.b
+     * Enable global and peripheral interrupts
+     */
 }
 
-__interrupt(high_priority) void __isr(void){
-    
-    if(INTCONbits.TMR0IE && INTCONbits.TMR0IF){
-        // handle Timer0 interrupt here
-    }
-    
-    if(PIE1bits.CCP1IE && PIR1bits.CCP1IF){
-        // update watch on Display
-    }
-    
-    if(1 /*react on button press here*/){
-        
-    }
-    
-    // not sure if you missed an interrupt? Set a breakpoint on the Nop() below
-    // to check if you missed something.
-    while(1){
-        Nop();
-    }
-}
+/*
+ * Exercise 3.a
+ * Implement interrupt service routine. Check provided code blocks 
+ * within instruction!
+ */
