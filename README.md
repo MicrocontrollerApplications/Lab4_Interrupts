@@ -2,7 +2,7 @@
 
 Last time in the laboratory we deepened our knowledge about timers and the possibility to passively evaluate them. 
 Therefore, we configured Timer0, Timer1, and CCP1 to set flags after time x. Using only a timer has the disadvantage
-that we cannot easily achieve precise timings. Thus, we used the Capture Compare Module. Using the CCP increased the
+that we cannot easily achieve precise timings. Thus, we used the Capture Compare Module. Using the CCP1 increased the
 accuracy of the timing, but due to the cyclic execution of the main code we stil had some very minor delays in our
 evaluation.
 Today, we will deepen our understanding of interrupts and how to use them to overcome those known limitations.
@@ -127,13 +127,70 @@ block can be found.
  *  - Check the instructions for potentially relevant input pins.
  */
 ```
+Keep in mind, that PORTB provides two different modes for its pins and that you need to check the board's schematic to dtermine the required logical levels to turn the LED on or off.  
+**Initially, all LEDs shall be turned off!**
 
 ### Exercise 1.c - Finalize Timer0's configuration
+Last but not least, Timer0 needs some additional configurations. Check the current configuration and identifiy the missing configuration parameters. Timer0 shall overflow after approximately 130ms (129.536ms to be precise).
+**Do not change the Timers mode to 16 Bit.** There's another solution to achieve the requried duration! Also keep in mind to check the configured oscillator frequency. ;)
+> [!NOTE]
+> The prescaler is already assigned but not set. Find out the necassary prescaler value! ;)
+> Keep in mind, that a prescaler makes the timer slower, this must be considered in your calculations!
 
 
-## Exercise 2
-Configure Timer1 and CCP1 to trigger an interrupt every 100ms. Update the clock on interrupt.
+### Exercise 1.d - Check the functionality
+Now that our Timer, PORTB, and the ISR are set up, it's time to check if everything is working. If not already done, connect your development board to the PC. Click on debug and check if LED2 is blinking as expected. If yes, great! Additionally you could use the Simulator to stop the timing of the blinking LED. 
+> [!NOTE]
+> You can switch to Simulator Configuration using the drop-down-menu in the upper left corner of the IDE. Currently, PicKIT3 should be selected.
+> Remember to open the stopwach under Window -> Debugging -> Stopwatch.
 
+## Exercise 2 - Interrupt based clock
+In this exercise we will use Timer1 and the CCP1 Module to realize a clock on our display.
+Therefore, we need to
+1. [finalize configuration of Timer1](#exercise-2a---finalize-timer1s-configuration) so that it can at least count enough input cycles to not overflow within the timespan given by *time_step_in_ms*.
+2. [configure the CCP1 module](#exercise-2b---configure-ccp1-module) to trigger an interrupt every *time_step_in_ms* milliseconds, based on Timer1.
+3. [update the clock](#exercise-2c---update-the-clock) on our display within the ISR.
+
+If you think you can do this without further instructions - give it a go! It's a great test of your current skills. If not, don't stress yoursevle and just continue reading or click the links in above overview to get directly to relevant instructions.
+
+### Exercise 2.a - Finalize Timer1's configuration
+As Timer1 is used as our time base to update the clock, we need to configure it. We already know, that we will use the CPP module. Firstly, because it says so in the instructions and secondly, because you cannot stop *time_step_in_ms* milliseconds exactly with Timer1 without using the CCP1 module.
+Thus, we need to finalize the already existing configuration to let Timer1 count long enough to not overflow within *time_step_in_ms* milliseconds. Check the current configuration for the required parameters to calculate the time until overflow.
+> [!NOTE]
+> The prescaler is already set. To which value? Find out. ;)
+> Keep in mind, that a prescaler makes the timer slower, this must be considered in your calculations!
+
+> [!WARNING]
+> **DO NOT START THE TIMER BEFORE ALL PARAMETERS ARE CONFIGURED!**
+
+### Exercise 2.b - Configure CCP1 Module
+As we know that Timer1 will not overflow within 100ms it's now time to configure the CCP1 module to trigger the interrupt and reset Timer1, like we did in Lab3_Timers.
+The configuration is relatively easy, as you only need to
+1. calculate the required comparison value after which 100ms are over and set CCPR1 to that value
+2. configure CCP1 module's mode so that it resets Timer1 on a comparison match
+3. set Timer1 as CCP1's timer
+
+
+### Exercise 2.c - Update the clock
+Last but not least, we will update the clock on our display on every interrupt of CCP1. Therefore, we need to go back to our ISR at the end of main.c and add another if-statement that checks if the interrupt is coming from CCP1. You can use below boilerplate-code for that. Just replace *operandX* with the correct operands to check if CCP1's interrupt is enabled and triggered.
+```c
+if (operandX && operandX){
+    // do we need to reset something here?
+
+    add_ms_to_watch(clock, time_step_in_ms);
+
+    return;
+}
+```
+
+### Exercise 2.d - Check functionality
+Now that our Timer and CCP module are set up and the clock is updatedt on every interrupt, it's time to check if everything works correctly.
+Go ahead and press debug to see if the clock is running. Use your mobile's stopwatch to verifiy the correct timing of the clock.
+> [!TIP]
+> Don't try to stop one second, use 5 to 10 instead as the measurement error introduced by you (yes, you're not a machine and your reaction time is definetly greater than 100ms...) has less impact then.
+
+After checking the timing, have a look at the blinking LED. Does it blink consistently?
+If you want to, you can use the simulator and the stopwatch to check the timing of the blinking LED. Just check the timing, we will look for the error in the next exercise.
 
 ## Exercise 3
 Fix bug of wrong blink frequency
