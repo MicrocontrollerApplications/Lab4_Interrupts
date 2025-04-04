@@ -10,10 +10,14 @@
 
 #include <LCD/GLCD_library.h>
 
+#include "clock.h"
+
 void __init(void);
 void __interrupt() __isr(void);
 
+static clock_t clock;
 static unsigned char time_step_in_ms;
+
 /*
  * Exercise 3.a
  * Define a global variable as a flag for clock updates
@@ -37,6 +41,7 @@ void __init(void) {
     OSCCONbits.IRCF = 0b010; // Fosc = ??
     GLCD_Init();
     GLCD_Text2Out(0, 2, "00:00.0");
+    clock_init(clock);
 
     /*
      * Exercise 1.b
@@ -44,8 +49,8 @@ void __init(void) {
      *  - Keep in mind the two possible modes.
      *  - Check the instructions for potentially relevant input pins.
      */
-    
-    
+
+
     /* 
      * Timer0 shall overflow after approx. 130ms (no CCP required)
      */
@@ -56,32 +61,34 @@ void __init(void) {
      * Exercise 1.c
      * Add missing configurations for Timer0 and enable the related interrupt
      */
-    
-    
+
+
+    time_step_in_ms = 100;
+    T1CONbits.T1CKPS = 2; // PS = ?
+    T1CONbits.T1SYNC = 1;
+    TMR1 = 0;
     /*
      * Exercise 2.a
      * Add missing configurations for Timer1
      */
-    T1CONbits.T1CKPS = 2; // PS = ?
-    T1CONbits.T1SYNC = 1;
-    TMR1 = 0;
+
+
     T1CONbits.TMR1ON = 1;
-    time_step_in_ms = 100;
-    
+
     /*
      * Exercise 2.b
      * Configure CCP Module and the related interrupt
      */
-    
-    
-    
-    
+
+
+
+
     /*
      * Exercise 3.a
      * Configure an external interrupt for RB2
      */
-    
-    
+
+
     /*
      * Exercise 1.d
      * Enable global and peripheral interrupts
