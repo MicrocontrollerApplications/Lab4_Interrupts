@@ -8,8 +8,10 @@
 
 #include <xc.h>
 
+#include <LCD/GLCD_library.h>
+
 void __init(void);
-void __interrupt(high_priority) __isr(void);
+void __interrupt() __isr(void);
 
 static unsigned char time_step_in_ms;
 /*
@@ -37,7 +39,7 @@ void __init(void) {
     GLCD_Text2Out(0, 2, "00:00.0");
 
     /*
-     * Exercise 1.a
+     * Exercise 1.b
      * Pin configuration. 
      *  - Keep in mind the two possible modes.
      *  - Check the instructions for potentially relevant input pins.
@@ -51,13 +53,13 @@ void __init(void) {
     T0CONbits.T0CS = 0;
     T0CONbits.PSA = 0;
     /*
-     * Exercise 1.b
+     * Exercise 1.c
      * Add missing configurations for Timer0 and enable the related interrupt
      */
     
     
     /*
-     * Exercise 1.c
+     * Exercise 2.a
      * Add missing configurations for Timer1
      */
     T1CONbits.T1CKPS = 2; // PS = ?
@@ -67,7 +69,7 @@ void __init(void) {
     time_step_in_ms = 100;
     
     /*
-     * Exercise 1.d
+     * Exercise 2.b
      * Configure CCP Module and the related interrupt
      */
     
@@ -75,19 +77,19 @@ void __init(void) {
     
     
     /*
-     * Exercise 2.a
+     * Exercise 3.a
      * Configure an external interrupt for RB2
      */
     
     
     /*
-     * Exercise 2.b
+     * Exercise 1.d
      * Enable global and peripheral interrupts
      */
 }
 
 /*
- * Exercise 3.a
+ * Exercise 1.a
  * Implement interrupt service routine. Check provided code blocks 
  * within instruction!
  */

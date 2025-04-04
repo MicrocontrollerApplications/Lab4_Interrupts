@@ -10,6 +10,7 @@ Today, we will deepen our understanding of interrupts and how to use them to ove
 > [!TIP]
 > In case you need the manual for Git again, click [here](https://github.com/MicrocontrollerApplications/Utilities/blob/main/git.md)
 > If you need the development board's schematic, click [here](https://raw.githubusercontent.com/MicrocontrollerApplications/Lab2_InputOutput/refs/heads/main/images/uCquick_Board_2018_01.svg)
+> The latest datasheet can be found [here](https://ww1.microchip.com/downloads/aemDocuments/documents/MCU08/ProductDocuments/DataSheets/PIC18%28L%29F2X-4XK22-Data-Sheet-40001412H.pdf)
 
 ## Relevant registers
 For today's laboratory we will need the previously used registers to configure our Oscialltor, I/O pins, Timers, CCP Module, and the
@@ -62,3 +63,81 @@ of all relevant registers for today.
 <tr><th align="left">PIE</th><td>contains the individual enable bits for the peripheral interrupts</td></tr>
 </table>
 </details>
+
+## Relevant chapters of the datasheet
+We will use many of the available modules of our microcontroller today. Thus, the relevant chapters of the datasheet 
+for today's laboratory are listed below.
+- 2.0 OSCILLATOR MODULE (WITH FAIL-SAFE CLOCK MONITOR)
+- 9.0 INTERRUPTS
+- 10.0 I/O PORTS
+- 11.0 TIMER0 MODULE
+- 12.0 TIMER1/3/5 MODULE WITH GATE CONTROL
+- 14.0 CAPTURE/COMPARE/PWM MODULES
+
+## Exercise 1 - Interrupt based blinking LED
+### Exercise 1.a - Implement ISR
+As we will focus on interrupts within this laboratory, we will first implement the skeleton for our Interrupt Service
+Routine (ISR).
+Therefore, go to the end of main.c, where you should find the below shown comment block.
+```c
+/*
+ * Exercise 1.a
+ * Implement interrupt service routine. Check provided code blocks 
+ * within instruction!
+ */
+```
+This is the place within the code, where our ISR will be implemented. As told in the lecture, our ISR-function needs a 
+special keyword, to tell the compiler that this function needs to be placed in a special memory location.
+To implement the ISR you need the following syntax.
+```c
+void __interrupt(high_priority) __isr(void){
+    // implement the checks here
+}
+```
+Our first interrupt will be triggered by Timer0. Hence, we need to check if Timer0's interrupt is enabled **and** 
+triggered. Find out in which registers the relevant bits, TMR0IE and TMR0IF, are contained and add the required 
+if-statement checking if both are true (i.e. greater 1 in C).  
+Afterward, reset the interrupt flag (TMR0IF), toggle LED2, and ***return*** from the ISR.  
+Last but not least add an infinity loop containing a Nop() command at the end of your ISR. 
+```c
+void __interrupt(high_priority) __isr(void){
+    // implement the checks here
+    
+    // pin the program here, in case an interrupt was triggered but not processed.
+    // if your program stopped execution (e.g. LED2 is not blinking anymore), press pause and check if the program stops
+    // here
+    while(1){
+        Nop();
+    }
+}
+```
+This is done to check if your ISR misses any interrupts.
+Congratulations, you implemented your first ISR!  
+But before we can deploy it to our board, we need to first configure some pins and finish configuration of Timer0.
+This is done in the following exercises.
+
+### Exercise 1.b - Configure PORTB
+To let the LED blink, we need to add the required configurations. Do this in line 47, or after wherever the below comment
+block can be found.
+```c
+/*
+ * Exercise 1.b
+ * Pin configuration. 
+ *  - Keep in mind the two possible modes.
+ *  - Check the instructions for potentially relevant input pins.
+ */
+```
+
+### Exercise 1.c - Finalize Timer0's configuration
+
+
+## Exercise 2
+Configure Timer1 and CCP1 to trigger an interrupt every 100ms. Update the clock on interrupt.
+
+
+## Exercise 3
+Fix bug of wrong blink frequency
+
+
+## Exercise 4 (Experts only, not part of the voting)
+Add interrupt for button TL and start / stop the clock if button is pressed.
