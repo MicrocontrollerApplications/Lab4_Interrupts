@@ -7,7 +7,14 @@
 
 #include <clock.h>
 
-void add_ms_to_watch(clock_t* const clock, unsigned int milliseconds){
+void clock_init(clock_t clock){
+    clock->hours = 0;
+    clock->minutes = 0;
+    clock->seconds = 0;
+    clock->milliseconds = 0;
+}
+
+void add_ms_to_watch(clock_t const clock, unsigned int milliseconds){
     clock->milliseconds += milliseconds;
     if (clock->milliseconds >= 1000) {
         clock->milliseconds -= 1000;
@@ -25,7 +32,7 @@ void add_ms_to_watch(clock_t* const clock, unsigned int milliseconds){
     }
 }
 
-void add_sec_to_watch(clock_t* const clock, unsigned int seconds){
+void add_sec_to_watch(clock_t const clock, unsigned int seconds){
     clock->seconds += seconds;
     if (clock->seconds >= 60) {
         clock->seconds -= 60;
