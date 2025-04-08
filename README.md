@@ -193,8 +193,25 @@ After checking the timing, have a look at the blinking LED. Does it blink consis
 If you want to, you can use the simulator and the stopwatch to check the timing of the blinking LED. Just check the timing, we will look for the error in the next exercise.
 
 ## Exercise 3
-Fix bug of wrong blink frequency
+Now that we know that we have a timing issue, we should find the reason for it.  
+Remember the lecture about Interrupts and the rule about the execution time of such. *Keep the executioan time of ISRs as short as possible*!
+Look at the ISR and find the time consuming part of it. If you found it, proceed to fix it considering below hints. If you did not find it, ask for help before trying to fix it.
+
+> [!HINT]
+> 1. Keep in mind, that an ISR can access the same variables as the main program, if they are globally available. To declare such a global variable you can use below code snippet.
+>     ```C
+>     static int global_var;
+>     int main(void){
+>        // ...
+>     }
+>     ```
+> 2. You don't necessarily have to execute an action related to an ISR directly within the ISR. Keep in mind, that the microcontroller executes command very fast and thus ot's completely fine to execute actions that are not time critical (such as updating a display, toggling and LED, or the like) outside the ISR. This could exemplarily be done by checking if a value is larger than a threshold (such as a time difference that should be added to a display) and acting accordingly if this holds true. Thus, we could add a counter for our time differences that need to be added to our clock and simply update the displayed clock with this difference if it is larger than 0.
 
 
 ## Exercise 4 (Experts only, not part of the voting)
-Add interrupt for button TL and start / stop the clock if button is pressed.
+As you are now an advanced user of interrupts, it's time to further enhance our little clock. Therefore, we want to improve it from a simple clock to a stopwatch and thus need a start / stop button.
+Choose a button of you choice, enable it's dedicated interrupt and implement the required start / stop function.  
+Afterwards, try to even reset the stopwatch if it is started again after it was stopped.
+
+> [!WARNING]
+> The big button in the middle might seem best for this task, but it is connected to a pin that requires special interrupt configurations. Try to first implement everything with one of the other buttons. If that works and you're still eager to learn, try to use the middle button. Don't hesitate to ask for help, in case of problems. **You are also welcome to ask outside laboratory hours.**
