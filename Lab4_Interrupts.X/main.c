@@ -93,6 +93,7 @@ void __init(void) {
      * Exercise 1.d
      * Enable global and peripheral interrupts
      */
+     
 }
 
 /*

@@ -94,9 +94,7 @@ void __interrupt(high_priority) __isr(void){
     // implement the checks here
 }
 ```
-Our first interrupt will be triggered by Timer0. Hence, we need to check if Timer0's interrupt is enabled **and** 
-triggered. Find out in which registers the relevant bits, TMR0IE and TMR0IF, are contained and add the required 
-if-statement checking if both are true (i.e. greater 1 in C).  
+Our first interrupt will be triggered by Timer0. Hence, we need to check if Timer0's interrupt is enabled **and** triggered. Find out in which registers the relevant bits, TMR0IE and TMR0IF, are contained and add the required if-statement checking if both are true (i.e. greater 1 in C).  
 Afterward, reset the interrupt flag (TMR0IF), toggle LED2, and ***return*** from the ISR.  
 Last but not least add an infinity loop containing a Nop() command at the end of your ISR. 
 ```c
@@ -111,14 +109,14 @@ void __interrupt(high_priority) __isr(void){
     }
 }
 ```
-This is done to check if your ISR misses any interrupts.
+This is done to check if your ISR misses any interrupts.  
 Congratulations, you implemented your first ISR!  
-But before we can deploy it to our board, we need to first configure some pins and finish configuration of Timer0.
-This is done in the following exercises.
+> [!IMPORTANT]
+> But before we can deploy it to our board, we need to first configure some pins and finish configuration of Timer0.  
+> This is done in the following exercises.
 
 ### Exercise 1.b - Configure PORTB
-To let the LED blink, we need to add the required configurations. Do this in line 47, or after wherever the below comment
-block can be found.
+To let the LED blink, we need to add the required configurations. Do this in line 47, or after wherever the below comment block can be found.
 ```c
 /*
  * Exercise 1.b
@@ -127,7 +125,7 @@ block can be found.
  *  - Check the instructions for potentially relevant input pins.
  */
 ```
-Keep in mind, that PORTB provides two different modes for its pins and that you need to check the board's schematic to dtermine the required logical levels to turn the LED on or off.  
+Keep in mind, that PORTB provides two different modes for its pins and that you need to check the board's schematic to determine the required logical levels to turn the LED on or off.  
 **Initially, all LEDs shall be turned off!**
 
 ### Exercise 1.c - Finalize Timer0's configuration
@@ -139,12 +137,22 @@ Last but not least, Timer0 needs some additional configurations. Check the curre
 
 
 ### Exercise 1.d - Check the functionality
-Now that our Timer, PORTB, and the ISR are set up, it's time to check if everything is working. If not already done, connect your development board to the PC. Click on debug and check if LED2 is blinking as expected. If yes, great! Additionally you could use the Simulator to stop the timing of the blinking LED. 
+As our modules are set up now, we can enable our interrupts. Please do this in line 96, below following code block. (line numbers might have changed, if you added comments.)
+```C
+/*
+* Exercise 1.d
+* Enable global and peripheral interrupts
+*/
+```
+Now that our interrupts are enabled and our Timer, PORTB, and the ISR are good to go, it's time to check if everything is working. If not already done, connect your development board to the PC. Click on debug and check if the LED is blinking as expected. If yes, great! Additionally you could use the Simulator to stop the timing of the blinking LED. 
 > [!NOTE]
 > You can switch to Simulator Configuration using the drop-down-menu in the upper left corner of the IDE. Currently, PicKIT3 should be selected.
 > Remember to open the stopwach under Window -> Debugging -> Stopwatch.
 
 ## Exercise 2 - Interrupt based clock
+> [!WARNING]
+> **DO NOT START THE TIMER BEFORE ALL PARAMETERS ARE CONFIGURED!**
+
 In this exercise we will use Timer1 and the CCP1 Module to realize a clock on our display.
 Therefore, we need to
 1. [finalize configuration of Timer1](#exercise-2a---finalize-timer1s-configuration) so that it can at least count enough input cycles to not overflow within the timespan given by *time_step_in_ms*.
@@ -159,9 +167,6 @@ Thus, we need to finalize the already existing configuration to let Timer1 count
 > [!NOTE]
 > The prescaler is already set. To which value? Find out. ;)
 > Keep in mind, that a prescaler makes the timer slower, this must be considered in your calculations!
-
-> [!WARNING]
-> **DO NOT START THE TIMER BEFORE ALL PARAMETERS ARE CONFIGURED!**
 
 ### Exercise 2.b - Configure CCP1 Module
 As we know that Timer1 will not overflow within 100ms it's now time to configure the CCP1 module to trigger the interrupt and reset Timer1, like we did in Lab3_Timers.
@@ -197,7 +202,7 @@ Now that we know that we have a timing issue, we should find the reason for it.
 Remember the lecture about Interrupts and the rule about the execution time of such. *Keep the executioan time of ISRs as short as possible*!
 Look at the ISR and find the time consuming part of it. If you found it, proceed to fix it considering below hints. If you did not find it, ask for help before trying to fix it.
 
-> [!HINT]
+> [!NOTE]
 > 1. Keep in mind, that an ISR can access the same variables as the main program, if they are globally available. To declare such a global variable you can use below code snippet.
 >     ```C
 >     static int global_var;
