@@ -47,7 +47,7 @@ of all relevant registers for today.
 <summary><strong>Capture Compare Module</strong></summary>
 <table>
 <tr><th align="left">CCPxCON</th><td>configure the Capture Compare Module</td></tr>
-<tr><th align="left">CCPx<i>H/L</i></th><td> set comparison value for comparison mode of Capture Compare Module</td></tr>
+<tr><th align="left">CCPRx<i>H/L</i></th><td> set comparison value for comparison mode of Capture Compare Module</td></tr>
 <tr><th align="left">CCPTMRS0</th><td> set timer to be compared with CCPx<i>H/L</i></td></tr>
 <tr><th align="left">PIR1</th><td> to check Capture Compare Module's interrupt flag</td></tr>
 </table>
@@ -129,7 +129,7 @@ Keep in mind, that PORTB provides two different modes for its pins and that you 
 **Initially, all LEDs shall be turned off!**
 
 ### Exercise 1.c - Finalize Timer0's configuration
-Last but not least, Timer0 needs some additional configurations. Check the current configuration and identifiy the missing configuration parameters. Timer0 shall overflow after approximately 130ms (129.536ms to be precise).
+Last but not least, Timer0 needs some additional configurations. Check the current configuration and identifiy the missing configuration parameters. Timer0 shall overflow after approximately 130ms (131.072ms to be precise).
 **Do not change the Timers mode to 16 Bit.** There's another solution to achieve the requried duration! Also keep in mind to check the configured oscillator frequency. ;)
 > [!NOTE]
 > The prescaler is already assigned but not set. Find out the necassary prescaler value! ;)
