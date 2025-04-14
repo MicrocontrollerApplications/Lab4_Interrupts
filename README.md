@@ -95,14 +95,14 @@ void __interrupt(high_priority) __isr(void){
 }
 ```
 Our first interrupt will be triggered by Timer0. Hence, we need to check if Timer0's interrupt is enabled **and** triggered. Find out in which registers the relevant bits, TMR0IE and TMR0IF, are contained and add the required if-statement checking if both are true (i.e. greater 1 in C).  
-Afterward, reset the interrupt flag (TMR0IF), toggle LED2, and ***return*** from the ISR.  
+Afterward, reset the interrupt flag (TMR0IF), toggle LED3, and ***return*** from the ISR.  
 Last but not least add an infinity loop containing a Nop() command at the end of your ISR. 
 ```c
 void __interrupt(high_priority) __isr(void){
     // implement the checks here
     
     // pin the program here, in case an interrupt was triggered but not processed.
-    // if your program stopped execution (e.g. LED2 is not blinking anymore), press pause and check if the program stops
+    // if your program stopped execution (e.g. LED3 is not blinking anymore), press pause and check if the program stops
     // here
     while(1){
         Nop();
@@ -116,7 +116,7 @@ Congratulations, you implemented your first ISR!
 > This is done in the following exercises.
 
 ### Exercise 1.b - Configure PORTB
-To let the LED blink, we need to add the required configurations. Do this in line 47, or after wherever the below comment block can be found.
+To let the LED3 blink, we need to add the required configurations. Do this in line 47, or after wherever the below comment block can be found.
 ```c
 /*
  * Exercise 1.b
@@ -125,7 +125,7 @@ To let the LED blink, we need to add the required configurations. Do this in lin
  *  - Check the instructions for potentially relevant input pins.
  */
 ```
-Keep in mind, that PORTB provides two different modes for its pins and that you need to check the board's schematic to determine the required logical levels to turn the LED on or off.  
+Keep in mind, that PORTB provides two different modes for its pins and that you need to check the board's schematic to determine the required logical levels to turn the LED3 on or off.  
 **Initially, all LEDs shall be turned off!**
 
 ### Exercise 1.c - Finalize Timer0's configuration
@@ -144,7 +144,7 @@ As our modules are set up now, we can enable our interrupts. Please do this in l
 * Enable global and peripheral interrupts
 */
 ```
-Now that our interrupts are enabled and our Timer, PORTB, and the ISR are good to go, it's time to check if everything is working. If not already done, connect your development board to the PC. Click on debug and check if the LED is blinking as expected. If yes, great! Additionally you could use the Simulator to stop the timing of the blinking LED. 
+Now that our interrupts are enabled and our Timer, PORTB, and the ISR are good to go, it's time to check if everything is working. If not already done, connect your development board to the PC. Click on debug and check if the LED3 is blinking as expected. If yes, great! Additionally you could use the Simulator to stop the timing of the blinking LED. 
 > [!NOTE]
 > You can switch to Simulator Configuration using the drop-down-menu in the upper left corner of the IDE. Currently, PicKIT3 should be selected.
 > Remember to open the stopwach under Window -> Debugging -> Stopwatch.
