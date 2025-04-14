@@ -1,0 +1,12 @@
+Lab4_Interrupts.X/debug/
+Lab4_Interrupts.X/build/
+Lab4_Interrupts.X/dist/
+Lab4_Interrupts.X/nbproject/*
+!Lab4_Interrupts.X/nbproject/configurations.xml
+!Lab4_Interrupts.X/nbproject/project.xml
+
+/Lab4_Interrupts.X/build/
+/Lab4_Interrupts.X/dist/
+
+*.log*
+sample_sol.c
