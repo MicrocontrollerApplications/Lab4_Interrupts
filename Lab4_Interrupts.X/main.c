@@ -15,7 +15,7 @@
 void __init(void);
 void __interrupt() __isr(void);
 
-static clock_t clock;
+static clock_t* clock = &(clock_t){0};
 static unsigned char time_step_in_ms;
 
 /*
