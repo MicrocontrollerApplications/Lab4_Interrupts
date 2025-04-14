@@ -1,4 +1,4 @@
-/*
+/* 
  * File:   clock.c
  * Author: Sebastian Moosbauer
  *
@@ -9,11 +9,8 @@
 
 #include "LCD/GLCD_library.h"
 
-void clock_init(clock_t clock){
-    clock->hours = 0;
-    clock->minutes = 0;
-    clock->seconds = 0;
-    clock->milliseconds = 0;
+void clock_init(clock_t* clock){
+    *clock = calloc(sizeof(struct clock), 1);
 }
 
 void print_clock(clock_t const clock){
@@ -38,7 +35,7 @@ void add_ms_to_watch(clock_t const clock, unsigned int milliseconds){
         clock->minutes -= 60;
         ++clock->hours;
     }
-
+    
     print_clock(clock);
 }
 
@@ -53,6 +50,6 @@ void add_sec_to_watch(clock_t const clock, unsigned int seconds){
         clock->minutes -= 60;
         ++clock->hours;
     }
-
+    
     print_clock(clock);
 }
