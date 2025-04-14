@@ -13,7 +13,7 @@
 #include "clock.h"
 
 void __init(void);
-void __interrupt() __isr(void);
+void __interrupt(high_priority) __isr(void);
 
 static clock_t clock;
 static unsigned char time_step_in_ms;
@@ -41,7 +41,7 @@ void __init(void) {
     OSCCONbits.IRCF = 0b010; // Fosc = ??
     GLCD_Init();
     GLCD_Text2Out(0, 2, "00:00.0");
-    clock_init(clock);
+    clock_init(&clock);
 
     /*
      * Exercise 1.b

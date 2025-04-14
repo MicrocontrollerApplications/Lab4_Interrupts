@@ -20,7 +20,7 @@ typedef struct clock* clock_t;
  * Initialize clock to start from 00:00:00.000 (HH:MM:SS.MS)
  * @param clock
  */
-void clock_init(clock_t clock);
+void clock_init(clock_t* clock);
 
 /**
  * Increase time on handed over clock for given number of milliseconds.
