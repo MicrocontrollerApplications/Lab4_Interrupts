@@ -19,7 +19,7 @@ void clock_init(clock_t clock){
 void print_clock(clock_t const clock){
     GLCD_Value2Out_00(0, 2, clock->minutes, 2);
     GLCD_Value2Out_00(0, 5, clock->seconds, 2);
-    GLCD_Value2Out_00(0, 8, clock->milliseconds, 2);
+    GLCD_Value2Out_00(0, 8, clock->milliseconds/100, 1);
 }
 
 void add_ms_to_watch(clock_t const clock, unsigned int milliseconds){
